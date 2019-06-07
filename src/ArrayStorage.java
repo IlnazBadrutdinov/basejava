@@ -3,54 +3,39 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int size; // раззмер хранилища
+    int size=0;
 
     void clear() {
-        // перебираем все хранилице и обнуляем поэлементно
-          for (int i = 0; i < this.size; i++) {
-             this.storage[i] = null; }
+          for (int i = 0; i < size; i++) {
+             storage[i] = null; }
+             size=0;
     }
 
     void save(Resume r) {
-        // проходим по всему хранилищу
-        for (int k=0; k<storage.length;k++){
-            //если не пустое значение
-            if (storage[k] == null){
-              //присваиваем ему значение, записываем элемент в хранилище
-              storage[k] = r;
-              //увеличиваем размер хранилища, т.к. добавили элемент
-              size++;
-              return;
-            }
-        }
+         storage[size] = r;
+          size++;
     }
 
     Resume get(String uuid) {
        for(int i= 0; i<size; i++){
-           //если соответствует элемент хранилища входному элементу, возвращаем его
-           if(this.storage[i].uuid.equals(uuid)){
-               return this.storage[i];
+           if(storage[i].uuid.equals(uuid)){
+               return storage[i];
            }
        }
         return null;
     }
 
     void delete(String uuid) {
-        //не могу присвоить 0, так как индексация в массиве начинается с 0. И в этом случае будет не всегда корректно выполняться последнее условие
-        int index = -1;
+        int index = 0;
         int i=0;
 
-        //пока есть элементы
-        while (i<this.size) {
-            // прооверка на соответсвие найденному элементу
-            if (this.storage[i].uuid.equals(uuid)) {
-                //сохраняем найденный индекс
+        while (i<size) {
+            if (storage[i].uuid.equals(uuid)){
                 index = i;
-                // сдвигаем элементы хранилища, затирая элемент найденный по индексу
-                for (int j = index; j < size - 1; i++) {
-                    this.storage[j] = this.storage[j + 1];
+                for (int j = index; j < size - 1; j++) {
+                    storage[j] = storage[j + 1];
                 }
-                this.size--;
+                size--;
                 break;
             }
             i++;
@@ -60,10 +45,9 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] result = new Resume[this.size];
-        // проходим по хранилищу и возвращаем элементы
-        for (int i = 0; i < this.size; i++) {
-            result[i] = this.storage[i];
+        Resume[] result = new Resume[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = storage[i];
         }
         return result;
 
