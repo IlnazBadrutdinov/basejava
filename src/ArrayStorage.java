@@ -3,44 +3,79 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int size=0;
+    int size = 0;
 
-    void clear() {
-          for (int i = 0; i < size; i++) {
-             storage[i] = null; }
-             size=0;
+    int search(String uuid, int j) {
+
+        if (size == storage.length && j == 1) {
+            System.out.println("Storage crowded!");
+            System.out.println("----------------------------");
+            return 0;
+        } else {
+            int counter = -1;
+            for (int i = 0; i < size; i++) {
+                if (storage[i].uuid.equals(uuid)) {
+                    counter = i;
+                    break;
+                }
+            }
+            if (counter == -1 && j != 1) {
+                System.out.println("Resume does not exist!");
+                System.out.println("----------------------------");
+            } else if (counter != -1 && j == 1) {
+                System.out.println("Resume already exist!");
+                System.out.println("----------------------------");
+            }
+            return counter;
+        }
     }
 
+    void clear() {
+        for (int i = 0; i < size; i++) {
+            storage[i] = null;
+        }
+        size = 0;
+    }
+
+    void update(Resume resume) {
+        int j = search(resume.uuid, 0);
+        if (j != -1) {
+            storage[j] = resume;
+        }
+    }
+
+
     void save(Resume r) {
-         storage[size] = r;
-          size++;
+        //boolean variable = Arrays.asList(storage).contains(r.uuid); - почему всегда false?
+        int j = search(r.uuid, 1);
+        if (j == -1) {
+            storage[size] = r;
+            size++;
+        }
+
     }
 
     Resume get(String uuid) {
-       for(int i= 0; i<size; i++){
-           if(storage[i].uuid.equals(uuid)){
-               return storage[i];
-           }
-       }
+        int j = search(uuid, 0);
+        if (j != -1) {
+            return storage[j];
+        }
         return null;
     }
 
     void delete(String uuid) {
-        int index = 0;
-        int i=0;
-
-        while (i<size) {
-            if (storage[i].uuid.equals(uuid)){
-                index = i;
-                for (int j = index; j < size - 1; j++) {
-                    storage[j] = storage[j + 1];
+        int j = search(uuid, 0);
+        if (j != -1) {
+            for (int i = j; i < size; i++) {
+                if (storage[i].uuid.equals(uuid)) {
+                    storage[i] = storage[size - 1];
+                    storage[size - 1] = null;
+                    size--;
                 }
-                size--;
-                break;
             }
-            i++;
         }
     }
+
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -54,6 +89,6 @@ public class ArrayStorage {
     }
 
     int size() {
-       return this.size;
+        return size;
     }
 }
