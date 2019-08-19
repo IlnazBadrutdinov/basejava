@@ -1,70 +1,72 @@
 /**
  * Array based storage for Resumes
  */
+
+import java.util.Arrays;
+
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[10_000];
     int size = 0;
 
-    int search(String uuid, int j) {
+    public int search(String uuid) {
+        int counter = -1;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                counter = i;
+                break;
+            }
 
-        if (size == storage.length && j == 1) {
-            System.out.println("Storage crowded!");
-            System.out.println("----------------------------");
-            return 0;
-        } else {
-            int counter = -1;
-            for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(uuid)) {
-                    counter = i;
-                    break;
-                }
-            }
-            if (counter == -1 && j != 1) {
-                System.out.println("Resume does not exist!");
-                System.out.println("----------------------------");
-            } else if (counter != -1 && j == 1) {
-                System.out.println("Resume already exist!");
-                System.out.println("----------------------------");
-            }
-            return counter;
         }
+        return counter;
     }
 
-    void clear() {
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
+    public int notification(String uuid) {
+        int counter = search(uuid);
+        if (counter == -1) {
+            System.out.println("Resume does not exist!");
+            System.out.println("----------------------------");
         }
+        return counter;
+    }
+
+    public void clear() {
+        Arrays.fill(storage, null);
         size = 0;
     }
 
-    void update(Resume resume) {
-        int j = search(resume.uuid, 0);
+    public void update(Resume resume) {
+        int j = notification(resume.uuid);
         if (j != -1) {
             storage[j] = resume;
         }
     }
 
-
-    void save(Resume r) {
-        //boolean variable = Arrays.asList(storage).contains(r.uuid); - почему всегда false?
-        int j = search(r.uuid, 1);
-        if (j == -1) {
-            storage[size] = r;
-            size++;
+    public void save(Resume r) {
+        if (size == storage.length) {
+            System.out.println("Storage crowded!");
+            System.out.println("----------------------------");
+        } else {
+            int j = search(r.uuid);
+            if (j == -1) {
+                storage[size] = r;
+                size++;
+            } else {
+                System.out.println("Resume already exist!");
+                System.out.println("----------------------------");
+            }
         }
-
     }
 
-    Resume get(String uuid) {
-        int j = search(uuid, 0);
+    public Resume get(String uuid) {
+        int j = notification(uuid);
         if (j != -1) {
             return storage[j];
         }
         return null;
     }
 
-    void delete(String uuid) {
-        int j = search(uuid, 0);
+    public void delete(String uuid) {
+        int j = notification(uuid);
         if (j != -1) {
             for (int i = j; i < size; i++) {
                 if (storage[i].uuid.equals(uuid)) {
@@ -79,16 +81,13 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
-        Resume[] result = new Resume[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = storage[i];
-        }
+    public Resume[] getAll() {
+        Resume[] result = Arrays.copyOfRange(storage, 0, size);
         return result;
 
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
