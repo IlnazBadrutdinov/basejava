@@ -4,14 +4,14 @@
 public class Resume {
 
     // Unique identifier
-    String uuid;
+    public String uuid;
 
     @Override
     public String toString() {
         return uuid;
     }
 
-    public String getUuid() {
+    private String getUuid() {
         return uuid;
     }
 }
