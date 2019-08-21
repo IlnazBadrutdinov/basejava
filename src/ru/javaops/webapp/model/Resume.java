@@ -1,17 +1,25 @@
+package ru.javaops.webapp.model;
+
 /**
  * Initial resume class
  */
 public class Resume {
 
     // Unique identifier
-    public String uuid;
+    private String uuid;
+    
+    public String getUuid() {
+        return uuid;
+    }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
     @Override
     public String toString() {
         return uuid;
     }
 
-    private String getUuid() {
-        return uuid;
-    }
+
 }
