@@ -17,7 +17,6 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
             storage[index] = resume;
-            storageFormat();
         } else {
             System.out.println("Resume " + resume.getUuid() + " not exist!");
             System.out.println("----------------------------");
@@ -29,10 +28,9 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Storage overflow!");
             System.out.println("----------------------------");
         } else {
-            if (getIndex(resume.getUuid()) < 0) {
-                storage[size] = resume;
-                size++;
-                storageFormat();
+            int index = getIndex(resume.getUuid());
+            if (index < 0) {
+                insertIndex(resume, index);
             } else {
                 System.out.println("Resume " + resume.getUuid() + " already exist!");
                 System.out.println("----------------------------");
@@ -54,10 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
-            size--;
-            storageFormat();
+            deleteIndex(index);
         } else {
             System.out.println("Resume " + uuid + " not exist!");
             System.out.println("----------------------------");
@@ -71,11 +66,10 @@ public abstract class AbstractArrayStorage implements Storage {
     public int size() {
         return size;
     }
-    //абстрактный метод getIndex - его нужно реализовать в классах потомках
+
     protected abstract int getIndex(String uuid);
 
-    protected abstract void storageFormat();
+    protected abstract void insertIndex(Resume resume, int index);
 
-
-
+    protected abstract void  deleteIndex(int index);
 }

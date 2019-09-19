@@ -1,5 +1,7 @@
 package ru.javaops.webapp.storage;
 
+import ru.javaops.webapp.model.Resume;
+
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
@@ -13,5 +15,15 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void storageFormat() {}
+    protected void insertIndex(Resume resume, int index) {
+        storage[size] = resume;
+        size++;
+    }
+
+    @Override
+    protected void deleteIndex(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
+        size--;
+    }
 }

@@ -31,7 +31,7 @@ public class TestModelAll {
         printAll(ARRAY_STORAGE);
 
         System.out.println("After delete()");
-        ARRAY_STORAGE.delete(r1.getUuid());
+        ARRAY_STORAGE.delete(r2.getUuid());
         printAll(ARRAY_STORAGE);
 
         System.out.println("After clear()");

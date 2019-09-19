@@ -6,50 +6,29 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
 
-    //реализовали getIndex. Использует бинарный поиск.
     @Override
     protected int getIndex(String uuid) {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
+
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
     @Override
-    protected void storageFormat() {
-        quickSort(storage,0,size-1);
+    protected void insertIndex(Resume resume, int index) {
+        index = -index-1;
+        for (int j = size; index < j; j--) {
+            storage[j] = storage[j-1];
+        }
+        storage[index] = resume;
+        size++;
     }
 
-    private static Resume[] quickSort(Resume[] resume, int low, int high) {
-        if (low >= high) {
-            return resume;
+    @Override
+    protected void deleteIndex(int index) {
+        for (int j = index; j < size - 1; j++) {
+            storage[j] = storage[j + 1];
         }
-        // выбрать опорный элемент
-        int middle = low + (high - low) / 2;
-        Resume border = resume[middle];
-        // разделить на подмассивы, который больше и меньше опорного элемента
-        int i = low, j = high;
-        while (i <= j) {
-            while (resume[i].compareTo(border) < 0){
-                i++;
-            }
-            while (resume[j].compareTo(border) > 0) {
-                j--;
-            }
-            if (i <= j) {//меняем местами
-                Resume temp = resume[i];
-                resume[i] = resume[j];
-                resume[j] = temp;
-                i++;
-                j--;
-            }
-        }
-        // вызов рекурсии для сортировки левой и правой части
-        if (low < j) {
-            quickSort(resume, low, j);
-        }
-        if (high > i) {
-            quickSort(resume, i, high);
-        }
-        return resume;
+        size--;
     }
 }
